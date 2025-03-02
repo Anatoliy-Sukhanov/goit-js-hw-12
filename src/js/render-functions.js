@@ -1,41 +1,41 @@
-import SimpleLightbox from 'simplelightbox';
-import 'simplelightbox/dist/simple-lightbox.min.css';
+import SimpleLightbox from "simplelightbox";
+import "simplelightbox/dist/simple-lightbox.min.css";
 
-export function renderImg(images) {
-  const gallery = document.querySelector('#gallery');
-  gallery.innerHTML = '';
-  const markup = images
+export function renderImages(images) {
+  const gallery = document.querySelector(".gallery");
+  const markup = images.hits
     .map(
-      ({
-        largeImageURL,
-        webformatURL,
-        tags,
-        likes,
-        views,
-        comments,
-        downloads,
-      }) => `
-      <a href="${largeImageURL}" class="gallery-item">
-        <img src="${webformatURL}" alt="${tags}" />
-        <div class="image-info">
-          <p><strong>Likes:</strong> ${likes}</p>
-          <p><strong>Views:</strong> ${views}</p>
-          <p><strong>Comments:</strong> ${comments}</p>
-          <p><strong>Downloads:</strong> ${downloads}</p>
-        </div>
-      </a>`
+      (image) => `<li class="gallery-item">
+        <a href="${image.largeImageURL}">
+          <div class="gallery-top">
+            <img class="gallery-img" src="${image.webformatURL}" alt="${image.tags}" />
+          </div>
+          <ul class="gallery-bottom">
+            <li class="gallery-bottom-item">
+              <p class="gallery-bottom-stat">Likes</p>
+              <p class="gallery-bottom-value">${image.likes}</p>
+            </li>
+            <li class="gallery-bottom-item">
+              <p class="gallery-bottom-stat">Views</p>
+              <p class="gallery-bottom-value">${image.views}</p>
+            </li>
+            <li class="gallery-bottom-item">
+              <p class="gallery-bottom-stat">Comments</p>
+              <p class="gallery-bottom-value">${image.comments}</p>
+            </li>
+            <li class="gallery-bottom-item">
+              <p class="gallery-bottom-stat">Downloads</p>
+              <p class="gallery-bottom-value">${image.downloads}</p>
+            </li>
+          </ul>
+          </a>
+        </li>`
     )
-    .join('');
-
-  gallery.innerHTML = markup;
-
-  const lightbox = new SimpleLightbox('.gallery a', {
-    captionsData: 'alt',
+    .join("");
+  gallery.insertAdjacentHTML("beforeend", markup);
+  const lightbox = new SimpleLightbox(".gallery a", {
+    captionsData: "alt",
     captionDelay: 250,
-    captionPosition: 'bottom',
-    overlayOpacity: 1,
-    showCounter: false,
   });
-
   lightbox.refresh();
 }
